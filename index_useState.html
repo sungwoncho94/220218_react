@@ -30,7 +30,17 @@
         const [counter, setCounter] = React.useState(0);  // React.useState(초기값, 작동함수->리랜더링);
         const onClick = () => {
             /* modifier는 값을 받아서 그 값으로 업데이트 후 리랜더링 시켜줌 */
-            setCounter(counter + 1);
+            // counter의 이전 값에 직접 1을 더하는 것은 위험할 수 있다. 다른 곳에서 counter의 값이 변경될 가능성이 있기 때문이다.
+            // 이 방법은 직접 값을 설정해주는 방법임.
+            // 현재 state와 관련이 없는 값을 새로운 state로 주고 싶은 경우 사용
+            // setCounter(counter + 1);
+
+            // 현재 state를 기반으로 새로운 state를 얻고 싶을 때 사용하는 방법 = 함수를 전달해주는 방법. 
+            // 이 함수가 언제나 현재 state를 받을 수 있게 해줌.
+            // setCounter의 첫번째 인자는 현재 state 값임.
+            // 그리고 이 함수의 return값(cur+1)이 새로운 state가 됨.
+            // 둘 다 현재의 state를 가지고 새로운 값을 계산하지만, 아래 함수가 더 안전함. 확실히 현재희 값을 가지고 올 수 있기 때문. 다른 함수에서 내가 사용하는 변수에 업데이트를 시켰어도 나는 확실히 지금의 현재값을 가지고 올 수 있다.
+            setCoutner((cur) => cur + 1);
         };
         return (
             <div>
