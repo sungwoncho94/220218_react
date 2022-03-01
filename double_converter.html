@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- add React -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <!-- add React-dom : react element를 HTML로 바꿔줌 -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <!-- add babel : JSX문법을 브라우저가 이해할 수 있도록 변환해주는 역할(주석처럼 변환해줌)-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+
+<style>
+    .pdR10{padding-right: 10px;}
+    .mgT10{margin-top: 10px;}
+</style>
+
+<script type="text/babel">
+    /* state : 데이터가 저장되는 곳 */
+    const root = document.getElementById('root');
+
+    // 시간변환기 컴포넌트
+    function MinutesToHours(){
+        const [amount, setAmount] = React.useState();
+        const [inverted, setInverted] = React.useState(false);
+        const onChange = (e) => {
+            setAmount(e.target.value);
+        }
+
+        const timeReset = () => setAmount("");
+        const onFlip = () => {
+            timeReset();
+            setInverted((cur) => !cur);
+        }
+
+        return (
+            <div>
+                <h3>{inverted ? "hours -> min" : "min -> hours"}</h3>
+                <div>
+                    <label htmlFor="min" className="pdR10">Minutes</label>
+                    <input value={inverted ? amount * 60 : amount} id="min" placeholder="min" type="number" onChange={onChange} disabled={inverted} />    
+                </div>
+                <div>
+                    <label htmlFor="hours" className="pdR10">Hours</label>
+                    <input value={inverted ? amount : amount / 60} id="hours" placeholder="hour" type="number" onChange={onChange} disabled={!inverted} />
+                </div>
+                <button className="mgT10" onClick={timeReset}>RESET</button>
+                <button className="mgT10" onClick={onFlip}>Flip</button>
+            </div>
+        );
+    };
+
+    // 거리변환기 컴포넌트
+    function KmToMiles(){
+        const [distance, setDistance] = React.useState("");
+        const [dtType, setDtType] = React.useState("km");
+
+        function changeDistance(e) {
+            setDistance(e.target.value);
+            
+        };
+
+        const dtReset = () => {setDistance("")};
+
+        const onDtFlip = () => {
+            dtReset();
+            dtType === "km" ? setDtType("Miles") : setDtType("km");
+        }
+
+        return (
+            <div>
+                <h3>{dtType === "km" ? "km -> miles" : "miles -> km"}</h3>
+                <div>
+                    <label htmlFor="km" className="pdR10">KM</label>
+                    <input value={dtType === 'km' ? distance : distance * 1.609} id="km" type="number" onChange={changeDistance} disabled={dtType === 'km' ? false : true} />
+                </div>
+                <div>
+                    <label htmlFor="miles" className="pdR10">Miles</label>
+                    <input value={dtType === 'km' ? distance / 1.609 : distance} id="miles" type="number" onChange={changeDistance} disabled={dtType==='Miles' ? false : true}/>
+                </div>
+                <button className="mgT10" onClick={dtReset}>Reset</button>
+                <button className="mgT10" onClick={onDtFlip}>Flip</button>
+            </div>
+        );
+    };
+
+    // 시간, 거리 변환기를 선택해서 불러올 수 있는 컴포넌트
+    function App(){
+        const [index, setIndex] = React.useState("0");
+        const onSelect = (e) => {
+            console.log(e.target.value, "index=", index);
+            setIndex(e.target.value);
+        }
+
+        return (
+            <div>
+                <h1>Choose the Converter you want</h1>
+                <select value={index} onChange={onSelect}>
+                    <option value="0" >Min & Hours</option>    
+                    <option value="1">Km & Miles</option>
+                    <option value="-1">no options</option>
+                </select>
+                <hr />
+                {index === "0" ? <MinutesToHours /> : index === "1" ? <KmToMiles /> : "준비된 변환기가 없습니다."}
+            </div>
+        );
+    };
+
+    ReactDOM.render(<App />, root);
+</script>
+
+</html>

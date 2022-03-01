@@ -24,34 +24,33 @@
 <script type="text/babel">
     /* state : 데이터가 저장되는 곳 */
     const root = document.getElementById('root');
-    
     function App(){
         const [amount, setAmount] = React.useState();
-        const [fliped, setFliped] = React.useState(false);
+        const [inverted, setInverted] = React.useState(false);
         const onChange = (e) => {
-            console.log("input Num = ", e.target.value);
+            // console.log("input Num = ", e.target.value);
+            // onChange함수는 input에 입력한 값을 state로 전달해줌.
             setAmount(e.target.value);
         }
 
-        const timeReset = () => setAmount(0);
+        const timeReset = () => setAmount("");
         const onFlip = () => {
             console.log('리셋');
             timeReset();
-            setFliped((cur) => !cur);
+            setInverted((cur) => !cur);
         }
 
         return (
             /* input의 값이 바뀔때마다 함수를 실행하고 싶을 때는 onChange 사용 */
             <div>
-                <h1>Super Converter</h1>
-                <h2>You want to convert {amount}</h2>
+                <h1>{inverted ? "hours -> min" : "min -> hours"}</h1>
                 <div>
                     <label htmlFor="min" className="pdR10">Minutes</label>
-                    <input value={fliped ? amount * 60 : amount} id="min" placeholder="min" type="number" onChange={onChange} disabled={fliped} />    
+                    <input value={inverted ? amount * 60 : amount} id="min" placeholder="min" type="number" onChange={onChange} disabled={inverted} />    
                 </div>
                 <div>
                     <label htmlFor="hours" className="pdR10">Hours</label>
-                    <input value={fliped ? amount : amount / 60} id="hours" placeholder="hour" type="number" onChange={onChange} disabled={!fliped} />
+                    <input value={inverted ? amount : amount / 60} id="hours" placeholder="hour" type="number" onChange={onChange} disabled={!inverted} />
                 </div>
                 <button className="mgT10" onClick={timeReset}>RESET</button>
                 <button className="mgT10" onClick={onFlip}>Flip</button>
