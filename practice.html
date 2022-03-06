@@ -29,42 +29,29 @@
     const root = document.getElementById('root');
 
     /* 버튼 컴포넌트 */
-    /* props에 기본값 설정  =>   fontSize = 15    ,  React가 아닌 JS기능임*/
-    function Btn({text, className, onClickProp, fontSize = 15}){
+    function Btn(props) {
         return(
-            <button style={{
-                backgroundColor: 'tomato',
-                color: 'white',
-                padding: '10px 20px',
-                border: 0,
-                borderRadius: 10,
-                fontSize,/* fontSize: fontSize 이기 때문에 축약가능 */
-            }} className={className} onClick={onClickProp}>
-                {text}
-            </button>
+            <button className={props.className} onClick={props.onClick}>{props.text}</button>
         )
-    }
-
-    const MemorizedBtn = React.memo(Btn);
-
-    /* propTypes 설정 */
-    Btn.propTypes = {
-        text : PropTypes.string,
-        className : PropTypes.string,
-        fontSize : PropTypes.number.isRequired,
     }
 
     /* 앱 컴포넌트 */
     function App(){
-        const [value, setValue] = React.useState("SAVE");
-        const changeValue = () => setValue("CHANGE VALUE");
+        const [myNum, setMyNum] = React.useState(50);
+
+        const changeValueSM = () => setMyNum((cur)=> cur - 5);
+        const changeValueM = () => setMyNum((cur)=> cur - 1);
+        const changeValueP = () => setMyNum((cur)=> cur + 1);
+        const changeValueSP = () => setMyNum((cur)=> cur + 5);
 
         return(
             <div>
-                <MemorizedBtn text={value} className="mgR10" onClickProp={changeValue}/>
-                <MemorizedBtn text="CONFIRM" />
-                <Btn text="Third BTN" fontSize={20} />
-                <hr />
+                <Btn text="Super Minus(-5)" className="mgR10" onClick={changeValueSM} />
+                <Btn text="Minus(-1)" className="mgR10" onClick={changeValueM} />
+                <Btn text="Plus(+1)" className="mgR10" onClick={changeValueP} />
+                <Btn text="Super Plus(+5)" onClick={changeValueSP} />
+                <br />
+                <span>{myNum}</span>
             </div>
         )
     };
